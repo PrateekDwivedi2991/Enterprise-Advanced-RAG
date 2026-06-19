@@ -1,93 +1,88 @@
-from pydantic import BaseSettings, SettingsConfigDict
-from qdrant_client import local
-from sqlalchemy import false, true
+from pydantic_settings import BaseSettings, SettingsConfigDict
+
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8")
 
-    # === LLM & Embeddings ===
-    OPENAI_API_KEY: str
-    LLM_MODEL_ANSWER: str
-    LLM_MODEL_GRADER: str
-    EMBEDDING_MODEL: str
+    openai_api_key: str = ""
+    llm_model_answer: str = "gpt-4o"
+    llm_model_grader: str = "gpt-4o-mini"
+    embedding_model: str = "text-embedding-3-small"
 
-    QDRANT_URL: str
-    QDRANT_API_KEY: str
+    qdrant_url: str = "http://localhost:6333"
+    qdrant_collection: str = "documents"
 
-    # === Database ===
-    DATABASE_URL: str
+    database_url: str = "postgresql://postgres:postgres@localhost:5432/adv_rag"
 
-    # === Cache (Upstash) ===
-    UPSTASH_REDIS_REST_URL: str
-    UPSTASH_REDIS_REST_TOKEN: str
-    CACHE_TTL_EMBEDDINGS: int
-    CACHE_TTL_RAG: int 
-    CACHE_TTL_SQL_GEN: int
-    CACHE_TTL_SQL_RESULT: int
-    CACHE_TTL_INTENT: int
+    upstash_redis_url: str = ""
+    upstash_redis_token: str = ""
+    cache_ttl_embeddings: int = 604_800
+    cache_ttl_rag: int = 3_600
+    cache_ttl_sql_gen: int = 86_400
+    cache_ttl_sql_result: int = 900
+    cache_ttl_intent: int = 86_400
 
-    STORAGE_BACKEND: str  # "local" or "s3"
-    S3_CACHE_BUCKET: str  # Bucket name for caching (if using S3)
-    AWS_REGION: str
+    storage_backend: str = "local"
+    s3_cache_bucket: str = "adv-rag-cache"
+    aws_region: str = "us-east-1"
 
-
-    # === AWS S3 (for file uploads) ===
-    AWS_ACCESS_KEY_ID: str
-    AWS_SECRET_ACCESS_KEY: str
-    AWS_REGION: str
-    AWS_S3_BUCKET_NAME: str
-
-    # === Web search ===
-    TAVILY_API_KEY: str
-
-    # === Auth ===
-    JWT_SECRET: str
-    JWT_EXPIRATION_MINUTES: int
-
-    RATE_LIMIT_REQUESTS: int
-    RATE_LIMIT_WINDOW_SECONDS: int
-    MAX_TOKENS_PER_USER_DAILY: int
-    AUTH_LOGIN_RATE_LIMIT_PER_MIN: int
-    AUTH_REGISTER_RATE_LIMIT_PER_HOUR: int
+    tavily_api_key: str = ""
 
 
-    MAX_INPUT_TOKENS: int
-    RESERVED_CONTEXT_TOKENS: int
-    RESERVED_OUPUT_TOKENS: int
+    jwt_secret: str = ""
+    jwt_expiration_minutes: int = 60
 
-    # === Input restructuring ===
+    rate_limit_requests: int = 20
+    rate_limit_window_seconds: int = 60
+    max_tokens_per_user_daily: int = 100_000
+    auth_login_rate_limit_per_min: int = 5
+    auth_register_rate_limit_per_hour: int = 3
+
+    max_input_tokens: int = 3_000
+    reserved_context_tokens: int = 1_000
+    reserved_output_tokens: int = 1_000
+
+    prompt_injection_threshold: float = 0.75
+    toxicity_threshold: float = 0.75
+    output_toxicity_threshold: float = 0.5
+    max_validation_retries: int = 2
+
+    hyde_num_hypotheses: int = 3
+    hyde_enabled_by_default: bool = False
+    hybrid_search_enabled: bool = True
+    rrf_k: int = 60
+    reranker_backend: str = "local"
+    reranker_model: str = "cross-encoder/ms-marco-MiniLM-L-6-v2"
+    voyage_api_key: str = ""
+    voyage_model: str = "rerank-2.5"
+    reranker_initial_top_k: int = 20
+    reranking_enabled_by_default: bool = True
+    crag_relevance_threshold: float = 0.7
+    crag_ambiguous_threshold: float = 0.5
+    crag_enabled_by_default: bool = True
+    reflection_min_score: float = 0.85
+    max_reflection_retries: int = 2
+    self_reflective_enabled_by_default: bool = False
 
 
-    # === Security thresholds ===
-    PROMPT_TOXICITY_THRESHOLD: float
-    OUTPUT_TOXICITY_THRESHOLD: float
-    MAX_VALIDATION_RETRIES: int
-    MAX_VALIDATION_RETRIES=2
+    vanna_model: str = "gpt-4o"
+    vanna_temperature: float = 0.0
+    vanna_seed: int = 42
 
-    # === Retrieval defaults ===
-    HYDE_NUM_HYPOTHESES: int
-    HYDE_ENABLED_BY_DEFAULT: bool
-    HYBRID_SEARCH_ENABLED: bool
-    RRF_K: int
-    RERANKER_BACKEND: str         # or "voyage"
-    RERANKER_MODEL: str
-    VOYAGE_API_KEY: str
-    VOYAGE_MODEL: str
-    RERANKER_INITIAL_TOP_K: int
-    RERANKING_ENABLED_BY_DEFAULT: bool
-    CRAG_RELEVANCE_THRESHOLD: float
-    CRAG_AMBIGUOUS_THRESHOLD: float
-    CRAG_ENABLED_BY_DEFAULT: bool
-    REFLECTION_MIN_SCORE: float
-    MAX_REFLECTION_RETRIES: int
-    SELF_REFLECTIVE_ENABLED_BY_DEFAULT: bool
+    log_json: bool = False
+    log_level: str = "INFO"
 
-    # === Vanna ===
-    VANNA_MODEL: str
-    VANNA_TEMPERATURE: float
-    VANNA_SEED: int
 
-    LOG_JSON: bool                  # true in prod
-    LOG_LEVEL: str = "INFO"
 
 settings = Settings()
+
+
+
+
+    
+
+
+
+    
+
+
