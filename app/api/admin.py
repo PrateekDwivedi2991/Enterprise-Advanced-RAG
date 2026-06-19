@@ -62,7 +62,7 @@ async def _ping_openai() -> bool:
         logger.debug("OpenAI health check failed: {}", exc)
         return False
 
-# async def _ping_tavily() -> bool:
+async def _ping_tavily() -> bool:
     try:
         from app.services.web_search import search_web
 
@@ -87,16 +87,16 @@ async def health_check() -> dict[str, Any]:
         _ping_qdrant(),
         _ping_redis(),
         _ping_openai(),
-        # _ping_tavily(),
+        _ping_tavily(),
         return_exceptions=True,
     )
     postgres_ok = bool(results[0]) if not isinstance(results[0], Exception) else False
     qdrant_ok = bool(results[1]) if not isinstance(results[1], Exception) else False
     redis_ok = bool(results[2]) if not isinstance(results[2], Exception) else False
     openai_ok = bool(results[3]) if not isinstance(results[3], Exception) else False
-    # tavily_ok = bool(results[4]) if not isinstance(results[4], Exception) else False
+    tavily_ok = bool(results[4]) if not isinstance(results[4], Exception) else False
 
-    all_ok = postgres_ok and qdrant_ok and redis_ok and openai_ok # and tavily_ok
+    all_ok = postgres_ok and qdrant_ok and redis_ok and openai_ok and tavily_ok
     status = "ok" if all_ok else "degraded"
 
     return {
@@ -105,7 +105,7 @@ async def health_check() -> dict[str, Any]:
         "postgres": postgres_ok,
         "redis": redis_ok,
         "openai": openai_ok,
-        # "tavily": tavily_ok
+        "tavily": tavily_ok
     }
 
 

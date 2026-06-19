@@ -10,7 +10,7 @@ from app.middleware.rate_limiter import is_allowed_ip
 router=APIRouter(tags=["auth"])
 
 def _get_db_conn():
-    return psycopg2.connect(settings.DATABASE_URL)
+    return psycopg2.connect(settings.database_url)
 
 @router.post("/auth/register",status_code=status.HTTP_201_CREATED)
 
@@ -19,7 +19,7 @@ async def register(request:Request,body:dict)->dict:
     allowed,_,_=is_allowed_ip(
         client_ip,
         "/auth/register",
-        limit=settings.AUTH_REGISTER_RATE_LIMIT_PER_HOUR,
+        limit=settings.auth_register_rate_limit_per_hour,
         window_seconds=3600
     )
 
@@ -61,7 +61,7 @@ async def login(request:Request,body:dict)->dict:
     allowed,_,_=is_allowed_ip(
         client_ip,
         "/auth/login",
-        limit=settings.AUTH_LOGIN_RATE_LIMIT_PER_MIN,
+        limit=settings.auth_login_rate_limit_per_min,
         window_seconds=60
     )
 
