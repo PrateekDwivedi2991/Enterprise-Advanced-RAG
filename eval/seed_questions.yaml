@@ -300,7 +300,7 @@
     - container
     - lifecycle
     - namespace
-  demonstrates_feature: self_rag
+  demonstrates_feature: self-rag
   expected_baseline: fail
   expected_with_feature: pass
   notes: "Deliberately vague. Naive returns a shallow overview. Self-RAG reflects (score < 0.85) → refines to multi-aspect coverage (lifecycle, scheduling, troubleshooting)."
@@ -316,7 +316,7 @@
     - severity
     - escalation
     - response
-  demonstrates_feature: self_rag
+  demonstrates_feature: self-rag
   expected_baseline: fail
   expected_with_feature: pass
   notes: "Open-ended — first answer typically too shallow. Self-RAG refines to specifics (severity levels, escalation paths, MTTR targets)."
@@ -331,7 +331,7 @@
     - kubectl
     - kubernetes
     - pod
-  demonstrates_feature: self_rag
+  demonstrates_feature: self-rag
   expected_baseline: fail
   expected_with_feature: pass
   notes: "Single-word maximally vague query. Naive returns no useful K8s sources. Self-RAG refines to 'kubectl explain' command and retrieves kubectl docs (reflection_iterations=1). (validated ✓)"
@@ -346,7 +346,7 @@
     - configmap
     - secret
     - pod
-  demonstrates_feature: self_rag
+  demonstrates_feature: self-rag
   expected_baseline: fail
   expected_with_feature: pass
   notes: "Context-free 3-word query. Naive answers about JSON parsing errors (noise). Self-RAG refines to ConfigMap/Secret pod config question with 2 reflection iterations. (validated ✓)"
